@@ -2,7 +2,7 @@
 
 project(capnp_test1 VERSION 0.1.0 LANGUAGES CXX)
 
-find_package(CapnProto PATHS C:/Users/patri/Documents/Projects/Libs/lib/cmake/CapnProto)
+find_package(CapnProto)
 
 add_executable (${PROJECT_NAME} "main.cpp" message.capnp.c++ message.capnp.h)
 target_link_libraries(${PROJECT_NAME} CapnProto::capnp)
