@@ -27,15 +27,16 @@ std::string read(const uint8_t *data, size_t data_len)
 	// Frustrationslevel: Maximum.
 	// Auffindbarkeit der zu verwendenden Datentypen gleich Null.
 	// Verstehbarkeit der zu verwendenden Datentypen gleich Null. Keine Beispiele vorhanden.
+	// minimal langsamer als flatbuffers (+2ms). Wahrscheinlich wegen anlegen von NullArrayDisposer, Array und ArrayInputStream.
 
 	// Option 1: specify file descriptor
 	//capnp::StreamFdMessageReader message(in_fd);
 	// Option 2: Use ArrayInputStream
 	kj::NullArrayDisposer disposer;
-	auto arr = kj::Array<uint8_t>((uint8_t*)data, data_len, disposer); // const wegcasten is a oasch.
+	auto arr = kj::Array<const uint8_t>(data, data_len, disposer);
 	kj::ArrayInputStream instream(arr);
-	// Ende Option 2
 	capnp::InputStreamMessageReader message(instream);
+	// Ende Option 2
 
 	Addressbook::Reader addressbook = message.getRoot<Addressbook>();
 	capnp::List<Person>::Reader people = addressbook.getPeople();
